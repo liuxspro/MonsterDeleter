@@ -16,10 +16,12 @@ from PyQt6.QtGui import (
     QColor,
     QCursor,
     QImage,
+    QKeySequence,
     QPainter,
     QPainterPath,
     QPen,
     QPixmap,
+    QShortcut,
     QTransform,
 )
 from PyQt6.QtMultimedia import QAudioOutput, QMediaPlayer
@@ -352,6 +354,11 @@ class MonsterDeleter(QWidget):
 
         # Always launch the sniper targeting UI for interactive aiming
         self.init_targeting_ui()
+
+        # Esc exits at any time, even when the bubble/choices windows have focus
+        self.esc_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        self.esc_shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.esc_shortcut.activated.connect(self.on_app_exit)
 
     @pyqtProperty(float)
     def bg_opacity(self):
