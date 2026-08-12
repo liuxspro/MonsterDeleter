@@ -338,8 +338,9 @@ class MonsterDeleter(QWidget):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-        screen = QApplication.primaryScreen().geometry()
-        self.setGeometry(screen)
+        screen = QApplication.primaryScreen()
+        if screen is not None:
+            self.setGeometry(screen.geometry())
 
         self.animator = SpriteAnimator(self)
         self.animator.hide()
