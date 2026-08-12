@@ -60,18 +60,36 @@ def register_context_menu():
             command_str = f'"{exe_path}" "%1"'
             icon_str = f'"{exe_path}",0'
 
-        key_path = r"Software\Classes\*\shell\SummonMonster"
-        key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
-        winreg.SetValue(key, "", winreg.REG_SZ, "召唤大将怪兽摧毁")
-        winreg.SetValueEx(key, "Icon", 0, winreg.REG_SZ, icon_str)
-        winreg.CloseKey(key)
+        # "*" = all files, "Directory" = all folders
+        for root in ["*", "Directory"]:
+            key_path = rf"Software\Classes\{root}\shell\SummonMonster"
+            key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
+            winreg.SetValue(key, "", winreg.REG_SZ, "召唤大将怪兽摧毁")
+            winreg.SetValueEx(key, "Icon", 0, winreg.REG_SZ, icon_str)
+            winreg.CloseKey(key)
 
-        command_key_path = key_path + r"\command"
-        command_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, command_key_path)
-        winreg.SetValue(command_key, "", winreg.REG_SZ, command_str)
-        winreg.CloseKey(command_key)
+            command_key_path = key_path + r"\command"
+            command_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, command_key_path)
+            winreg.SetValue(command_key, "", winreg.REG_SZ, command_str)
+            winreg.CloseKey(command_key)
+
+        # Refresh Explorer so the new menu shows up immediately
+        notify_shell()
     except Exception as e:
         print(f"Error registering menu: {e}")
+
+
+def notify_shell():
+    try:
+        import ctypes
+
+        SHCNE_ASSOCCHANGED = 0x08000000
+        SHCNF_IDLIST = 0
+        ctypes.windll.shell32.SHChangeNotify(
+            SHCNE_ASSOCCHANGED, SHCNF_IDLIST, None, None
+        )
+    except Exception:
+        pass
 
 
 class SpriteAnimator(QLabel):
@@ -173,9 +191,6 @@ class SpriteAnimator(QLabel):
                 transform, Qt.TransformationMode.SmoothTransformation
             )
         self.setPixmap(frame)
-
-
-from PyQt6.QtGui import QPainterPath
 
 
 class BubbleWidget(QWidget):
