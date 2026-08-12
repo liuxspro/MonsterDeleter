@@ -46,9 +46,11 @@ python main.py "C:\path\to\your\file.txt"
 ```bash
 pyinstaller --noconfirm --onefile --windowed --name MonsterDeleter --add-data "assets;assets" --hidden-import send2trash main.py
 ```
+
 > **提示**: 生成的独立程序会在 `dist/MonsterDeleter.exe`。程序会在运行时自动将 `assets` 目录解压到临时路径 (`sys._MEIPASS`) 并完美加载。
 
 ## 📂 项目结构
+
 ```
 MonsterDeleter/
 │
@@ -57,10 +59,11 @@ MonsterDeleter/
 ├── requirements.txt         # 运行所需依赖
 ├── assets/                  # 资源目录 (打包时嵌入 exe)
 │   ├── 音频/                # bgm, 音效等
-│   └── *_transparent.png    # 优化后的高压缩比透明背景序列帧
+│   └── *_transparent.webp  # 优化后的高压缩比透明背景序列帧 (WebP)
 ├── scripts/                 # 工具脚本目录 (绿幕抠图、切片等)
 └── tests/                   # 开发过程中的测试用例
 ```
 
 ## 📜 许可
+
 本项目仅供娱乐与学习使用。
