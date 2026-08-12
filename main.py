@@ -62,8 +62,10 @@ def register_context_menu():
             command_str = f'"{exe_path}" "%1"'
             icon_str = f'"{exe_path}",0'
 
-        # "*" = all files, "Directory" = all folders
-        for root in ["*", "Directory"]:
+        # "*" = all files, "Directory" = all folders.
+        # "lnkfile" = shortcuts: the shell resolves .lnk targets for "*" verbs,
+        # so without it the shortcut's target would be deleted instead.
+        for root in ["*", "Directory", "lnkfile"]:
             key_path = rf"Software\Classes\{root}\shell\SummonMonster"
             key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
             winreg.SetValue(key, "", winreg.REG_SZ, "召唤大将怪兽摧毁")
